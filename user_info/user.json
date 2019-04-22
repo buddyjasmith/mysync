@@ -1,8 +1,8 @@
 {
     "user_name" : "drew",
     "password" : "",
-    "server_ip" :"104.248.59.1",
-    "local_ip" : "192.168.1.5",
+    "server_ip" :"",
+    "local_ip" : "",
     "service_name" : "MySync",
     "public_key_path": "~/.ssh/id_rsa.pub"
 }

@@ -74,7 +74,7 @@ class sync_tool:
         client.load_system_host_keys()
         client.connect(hostname, username=user)
         command ="cd " + path + " && mkdir " + new_dir 
-        stdin, stdout, stderr = client.exec_command(command)
+   
         try:
             stdin, stdout, stderr = client.exec_command(command)
             return True

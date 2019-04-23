@@ -7,7 +7,7 @@ from paramiko import SSHClient
 import subprocess
 import pickle
 import json
-import queue
+
 class sync_tool:
 
     def __init__(self, local_directory,  remote_directory):
@@ -31,7 +31,7 @@ class sync_tool:
         print(r_value)
         err = os.system(r_value)
         return True if (err==0) else False
-        
+
     def get_user_name(self):
         return str(self.user.user['user_name'])
 
@@ -44,12 +44,14 @@ class sync_tool:
     def get_remote_dir(self):
         return str(self.remote_directory)
     def get_directory_on_server(self):
-   
+        '''
         hostname = self.get_remote_ip()
         user = self.get_user_name()
         client = SSHClient()
         client.load_system_host_keys()
         client.connect(hostname, username=user)
+        '''
+        client = self.create_client()
         try:
             stdin, stdout, stderr = client.exec_command('python newnewdir.py')
             dir = stdout.readlines()
@@ -68,20 +70,34 @@ class sync_tool:
         
 
     def create_directory_server(self,path,new_dir):
+        '''
         hostname = self.get_remote_ip()
         user = self.get_user_name()
         client = SSHClient()
         client.load_system_host_keys()
         client.connect(hostname, username=user)
+        '''
+        client = create_client()
         command ="cd " + path + " && mkdir " + new_dir 
-   
+       
         try:
             stdin, stdout, stderr = client.exec_command(command)
             return True
-         except(BadHostException,AuthenticationException,SSHException, socket.error) as e:
+        except(BadHostException,AuthenticationException,SSHException, socket.error) as e:
             print(e)
             return False
+
+    def create_client(self):
+        hostname = self.get_remote_ip()
+        user = self.get_user_name()
+        client = SSHClient()
+        client.load_system_host_keys()
+        client.connect(hostname, username=user)
+        return client
         
+    def add_to_queue(self,path):
+        self.q.append(path)
+
 
 
     def main(self):
@@ -91,7 +107,7 @@ if __name__ == "__main__":
 
     sync = sync_tool('~/TestFolder/', '~/TestFolder/')
     sync.get_directory_on_server()
-    sync.create_directory_server('./Testing','cats')
+    #sync.create_directory_server('./Testing','cats')
 
 
 

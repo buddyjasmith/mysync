@@ -10,24 +10,30 @@ import json
 
 class sync_tool:
 
-    def __init__(self, local_directory,  remote_directory):
-        self.local_directory = local_directory
-        self.base = "rsync -avzh --relative "
-        self.remote_directory = remote_directory
+    def __init__(self):
+        
         self.user = User()
         self.q = []
+        
 
-    def push_to_server(self):
+    def push_to_server(self,local_directory,remote_directory):
         #rsync -avz Documents/ root@157.230.57.175:~/backups/
-        r_value = self.base + self.local_directory + " " + self.get_user_name() + "@" + self.get_remote_ip() + ":" + self.get_remote_dir()
+        base = "rsync -avzh "
+        r_value = base + local_directory + " " + self.get_user_name() + "@" + self.get_remote_ip() + ":" + remote_directory
+        print(r_value)
         err = os.system(r_value)
         return True if(err==0) else False
+        
 
-    def pull_from_server(self):
+    def pull_from_server(self,local_directory, remote_directory):
         """
         Example: rsync -avz  root@157.230.57.175:~/backups/ ~/Documents
         """
-        r_value = self.base + self.get_user_name() + "@" + self.get_remote_ip() + self.get_remote_dir() + " " + self.local_directory
+        if(not remote_directory.endswith('/')):
+            print("shit went awry")
+            remote_directory += '/'
+        base = "rsync -avzh "
+        r_value = base + self.get_user_name() + "@" + self.get_remote_ip() +":"+ remote_directory + " " + local_directory
         print(r_value)
         err = os.system(r_value)
         return True if (err==0) else False
@@ -97,7 +103,10 @@ class sync_tool:
         
     def add_to_queue(self,path):
         self.q.append(path)
-
+    
+    def two_way_sync(self,local_directory,remote_directory):
+        self.push_to_server(local_directory,remote_directory)
+        self.pull_from_server(local_directory,remote_directory)
 
 
     def main(self):
@@ -105,8 +114,11 @@ class sync_tool:
 
 if __name__ == "__main__":
 
-    sync = sync_tool('~/TestFolder/', '~/TestFolder/')
-    sync.get_directory_on_server()
+    sync = sync_tool()
+    #sync.get_directory_on_server()
+    #sync.pull_from_server('../../../Testing','~/Testing')
+    #sync.pull_from_server('~/Testing','~/Testing')
+    sync.two_way_sync('~/Testing/','~/Testing/')
     #sync.create_directory_server('./Testing','cats')
 
 

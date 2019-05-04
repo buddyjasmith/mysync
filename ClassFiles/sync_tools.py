@@ -1,27 +1,25 @@
 import os
-import shutil
 import time
 from user import User
 import sys
 from paramiko import SSHClient
 import subprocess
-import pickle
-import json
-import time
-import apt
+
+
+
 class sync_tool:
 
     def __init__(self):
-        
+        """
+        :par
+        """
         self.user = User()
-        self.q = []
-        print(self.check_sshfs_install())
         self.check_local_remote_mount_path()
-        print(self.mount_remote_server())
-        time.sleep(10)
-        print(self.pull_from_server("~/Desktop/TestFolder/","~/MySyncRemote/"))
-        #print(self.push_to_server("~/Documents","~/MySyncRemote/"))
-        print(self.unmount_remote_directory())
+        self.mount_remote_server()
+        self.unmount_remote_directory()
+        
+       
+     
 
     def check_sshfs_install(self):
         err = os.system("which sshfs")
@@ -32,10 +30,16 @@ class sync_tool:
         return True if(status==0) else False
 
     def mount_remote_server(self):
-        mount_command = "sshfs " + self.user.get_user_name() + "@" + self.get_remote_ip() + ":" + self.user.get_remote_path()
+        mount_command = "sshfs " + self.user.get_user_name() + "@" + self.user.get_server_ip() + ":" + self.user.get_remote_path()
         mount_command += " " + self.user.get_local_remote_mount()
-        err = os.system(mount_command)
-        return True if(err==0) else False
+        #err = os.system(mount_command)
+        #return True if(err==0) else False
+        process = subprocess.Popen(mount_command,shell=True)
+        process.communicate()
+        process.wait()
+        print(process)
+    
+        
 
     def check_local_remote_mount_path(self):
         MySyncRemote = os.path.expanduser(self.user.get_local_remote_mount())
@@ -80,7 +84,7 @@ class sync_tool:
         cmd = "rm -rf " + delete_path
         err = os.system(cmd)
         return True if (err==0) else False
-        
+
     def add_directory_remote(self,new_dir_path):
         new_dir_path = os.path.expanduser(new_dir_path)
         cmd = "mkdir " + new_dir_path
@@ -93,11 +97,7 @@ class sync_tool:
 if __name__ == "__main__":
 
     sync = sync_tool()
-    #sync.get_directory_on_server()
-    #sync.pull_from_server('../../../Testing','~/Testing')
-    #sync.pull_from_server('~/Testing','~/Testing')
-    #sync.two_way_sync('~/Testing/','~/Testing/')
-    #sync.create_directory_server('./Testing','cats')
+  
 
 
 

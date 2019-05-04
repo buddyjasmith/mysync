@@ -13,10 +13,10 @@ else
     sudo apt install python3-pyqt5
 fi
 
-if command -v python3 &>/dev/null; then
+if command -v python3.6 &>/dev/null; then
     echo -e "\n"
 else
-    sudo apt install python3
+    sudo apt install python3.6
 fi
 
 if command -v python3-pip &>/dev/null;then

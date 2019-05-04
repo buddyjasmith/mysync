@@ -44,9 +44,23 @@ class User:
             print("Error Collecting or reading data.  Check Json contents")
         return {}
 
-    def get_user_info(self):
+    def get_user(self):
         return self.user
 
+    def get_user_name(self):
+        return str(self.user['user_name'])
+    
+    def get_server_ip(self):
+        return str(self.user['server_ip'])
+       
+    def get_local_remote_mount(self):
+        return str(self.user['local_remote_mount'])
+
+    def get_remote_path(self):
+        return str(self.user['remote_path'])
+
+    def get_ssh_path(self):
+        return str(self.user['ssh_path'])
 
 
 

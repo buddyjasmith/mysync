@@ -1,8 +1,9 @@
 {
     "user_name" : "drew",
     "password" : "",
-    "server_ip" :"",
-    "local_ip" : "",
+    "server_ip" :"104.248.214.224",
     "service_name" : "MySync",
-    "public_key_path": "~/.ssh/id_rsa.pub"
+    "ssh_path": "~/.ssh/id_rsa",
+    "local_remote_mount":"~/MySyncRemote",
+    "remote_path":"/home/drew/"
 }
